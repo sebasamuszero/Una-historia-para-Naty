@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Para Nay ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ====== RESET BÁSICO ====== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Georgia', serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #471d04, #08083b);
+      color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* ====== CONTENEDOR PRINCIPAL ====== */
+    .game {
+      width: 90%;
+      max-width: 700px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    #chapterImage {
+      display: none;
+      margin: 20px auto 0;
+      max-width: 50%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    /* ====== TEXTO TIPO NOVELA ====== */
+    .text-box {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      min-height: 180px;
+      margin-bottom: 25px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      white-space: pre-line;
+    }
+
+    .text-box.show {
+      opacity: 1;
+    }
+
+    /* ====== BOTÓN ====== */
+    .btn {
+      display: block;
+      margin: 0 auto;
+      padding: 12px 25px;
+      font-size: 1rem;
+      background: #e94560;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #ff6b81;
+      transform: scale(1.05);
+    }
+
+    /* ====== INDICADOR ESTILO ====== */
+    .level {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    /* ====== FOOTER ====== */
+    .footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Música de fondo -->
+  <audio id="bgm" loop>
+    <source src="music/Liana Flores - rises the moon.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="game">
+    <div class="level" id="level">Capítulo 1</div>
+
+    <h1>Una historia para Nay</h1>
+
+    <div class="text-box show" id="text">
+      holi   <!-- que haces viendo esto? esto es para naty -->
+    </div>
+
+    <img id="chapterImage" src="music/kasane-teto-machine-love.gif" alt="Imagen especial" />
+
+    <button class="btn" id="next">Continuar ▶</button>
+
+    <div class="footer">Presiona continuar para avanzar la historia</div>
+  </div>
+
+  <script>
+    const textBox = document.getElementById('text');
+    const nextBtn = document.getElementById('next');
+    const levelText = document.getElementById('level');
+    const music = document.getElementById('bgm');
+    const chapterImage = document.getElementById('chapterImage');
+  
+    // ===== CONFIGURACIÓN =====
+    const volumeLevel = 0.30;
+    const typingSpeed = 15;
+  
+    // ===== RUTAS DE MÚSICA =====
+    const musicTracks = {
+      track1: 'music/Liana Flores - rises the moon.mp3',
+      track2: 'music/Machine Love.mp3'
+    };
+  
+    // ===== HISTORIA =====
+    const story = [
+      { level: 'Prologo', text: 'Un minilibro que hecho para ti juntando la literatura y videojuegos.' },
+      { level: 'Capítulo 1', text: 'Hace mucho, cuando inicié esta partida, no sabía qué tenía que hacer ante este nuevo mundo.\n Sin mapa. Sin tutorial. Solo curiosidad… y tu nombre.' },
+      { level: 'Capítulo 1', text: 'Como en todo juego, al principio todo es desconocido, nuevo y desafiante. La diferencia es que ahora estarías tú como P2 en esta aventura que cada día, a pesar de aprender del pasado, se siente como el principio de algo nuevo por descubrir, desafiar y compartir.' },
+      { level: 'Capítulo 2', text: 'Llegaron desafíos mientras avanzábamos en este mundo que no perdona. Algunos buenos, con los que conseguimos botines y equipamiento para continuar nuestra aventura.\n Otros malos, que dejaron recuerdos marcados en nuestras skins y en nuestras estadísticas psicológicas.' },
+      { level: 'Capítulo 2', text: 'Pero aun así seguimos la partida. Incluso cuando quisiste desconectar tu mando y terminar el juego… seguimos.\n Mejorando, apoyándonos mutuamente en cada desafío que surgía, en cada expedición que emprendíamos. ' },
+      { level: 'Capítulo 3', text: 'Cada momento que compartimos ya sea yo cargando tu inventario mientras caminamos,la comida que compartimos aun sabiendo que casi no teníamos monedas para comprarla, cada conversación que nos llevaba a cuestionar quiénes somos en este mundo... \n todo eso significa más de lo que parece, sé que puedo ser olvidadizo o lento a veces pero \n Cada momento contigo es vivir algo nuevo, aunque sea lo más simple. ' },
+      { level: 'Capítulo 4', text: 'Cada nivel que superamos me llena de alegría.Ver cómo avanzas y cómo mejoramos.\n \n Sé que guardas el dolor de tus dificultades: tus papás limitando tus horas de juego, a veces no sentirte suficiente para pasar un nivel, o incluso querer reiniciar tu personaje en modo hardcore. ' },
+      { level: 'Capítulo 4', text: 'Tal vez no sepa todo de ti, y tal vez nunca lo logre. Pero tú sí has entrado más allá de cualquier capa de mi ser que cualquier otra persona. \n \n Por eso quiero que sepas que aquí estaré para ti: tu mago support y healer, ayudándote en lo que pueda y más. Ya sea avanzar un nivel o cuando tu salud esté baja, daré todo de mí hasta que se acabe mi mana y mi oro. \n \n Porque para mí eres tan importante que estaré a tu lado, sin importar la dificultad.' },
+      { level: 'Capítulo 5', text: 'Por todo esto quiero dedicarte esta cancion que suena de fondo "machine love". \n Me gusta su tono, su letra… y siento que, aunque no diga exactamente lo que siento, puede acercarse a ello.' },
+      { level: 'Capítulo 6', text: 'Y con todo esto NO te estoy pidiendo que seas mi pareja, ni mi novia, ni mi esposa. \n Solo quiero expresar lo que siento por ti. \n \n Estaré a tu lado apoyándote, cuidándote y queriéndote, hasta que te sientas lista para avanzar.\n Lo único que quiero es que seamos nosotros dos, afrontando juntos cada enemigo, cada jefe, cada dificultad, cada herida, cada logro…juntos.' },
+      { level: 'Epilogo', text: 'A pesar de no tener instrucciones sobre lo que viene en el futuro, \n forjemos lo mejor en nuestro presente para estar listos para lo que venga.\n --nunca me cansare de ti \n   -porque \n --te quiero tal y como eres' },
+      { level: 'Notas', text: 'notas:\nen este minilibro digital que hice use algunas palbras y expreciones que se usan en los juegos para darte y expresar una parte de mi mundo en tu mundo de literatura \n \n  piensalo como cuando encuentras una palabra nueva en un libro y la sudrayas para buscarla y saber su significado para entender mejor el contexto del libro. \n \n dado que perdi el minilibro original como si se hubiera quemado el manuscrito original esta version fue recreada tanto el texto y lo visual de una formas mas corta.' },
+      { level: 'Final', text: 'Gracias por leer...' }
+    ];
+  
+    // ===== ESTADO =====
+    let index = 0;
+    let charIndex = 0;
+    let typingInterval;
+    let startedMusic = false;
+    let currentTrack = 'track1';
+  
+    // ===== EFECTO TYPEWRITER =====
+    function typeWriter(text) {
+      clearInterval(typingInterval);
+      textBox.textContent = '';
+      charIndex = 0;
+  
+      typingInterval = setInterval(() => {
+        if (charIndex < text.length) {
+          textBox.textContent += text.charAt(charIndex);
+          charIndex++;
+        } else {
+          clearInterval(typingInterval);
+        }
+      }, typingSpeed);
+    }
+  
+    // ===== CAMBIO DE MÚSICA =====
+    function changeMusic(trackKey) {
+      if (currentTrack === trackKey) return;
+  
+      currentTrack = trackKey;
+      music.pause();
+      music.src = musicTracks[trackKey];
+      music.load();
+      music.volume = volumeLevel;
+  
+      if (startedMusic) {
+        music.play();
+      }
+    }
+  
+    // ===== MOSTRAR CAPÍTULO =====
+    function showStory() {
+      levelText.textContent = story[index].level;
+      typeWriter(story[index].text);
+  
+      // Cambia música 
+      if (index >= 8) {
+        changeMusic('track2');
+      } else {
+        changeMusic('track1');
+      }
+        // Imagen 
+      if (index === 8) {
+        chapterImage.style.display = 'block';
+      } else {
+        chapterImage.style.display = 'none';
+      }
+    }
+  
+    // ===== INICIAL =====
+    music.src = musicTracks.track1;
+    showStory();
+  
+    // ===== BOTÓN =====
+    nextBtn.addEventListener('click', () => {
+      if (!startedMusic) {
+        music.volume = volumeLevel;
+        music.play();
+        startedMusic = true;
+      }
+  
+      index++;
+  
+      if (index >= story.length) {
+        nextBtn.textContent = 'Fin ✨';
+        return;
+      }
+  
+      showStory();
+    });
+  </script>
+</body>
+
+</html>
